@@ -34,7 +34,7 @@ Cada `NNN-*/` contém `spec.md` (o quê), `plan.md` (como), `tasks.md` (ordem). 
 | 003 Dashboard | ✅ KPIs + atendimentos por barbeiro (server component) |
 | 004 Fila (walk-in) | ✅ kanban Aguardando/Atendendo/Finalizado, iniciar/finalizar/cancelar, polling 10s |
 | 005 Clientes (CRM) | ✅ lista paginada + busca server-side + virtualização + criar |
-| 006 Planos | ✅ lista + criar + desativar (assinaturas: pendente) |
+| 006 Planos & Assinaturas | ✅ planos + tela de assinaturas |
 | 007 Financeiro | ✅ receita por período + por barbeiro (via /dashboard/revenue) |
 | 010 Barbeiros/Equipe | ✅ lista + cadastro de membro (RBAC por papel) |
 | 008 Inbox (conversas) | ✅ lista + thread + resposta + Socket.IO real-time |
