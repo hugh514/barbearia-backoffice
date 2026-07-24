@@ -1,53 +1,67 @@
-# Backoffice Barbearia
+# barbearia-backoffice
 
-Painel de gestão (backoffice) da plataforma de barbearia. Consome exclusivamente a
-API central (`../api-barbearia`). Construído com Spec-Driven Development (ver `specs/`).
+Painel de gestão da plataforma de barbearia. Consome exclusivamente a API
+[`api-barbearia`](https://github.com/hugh514/api-barbearia).
+
+| Item | Valor |
+|------|--------|
+| Repositório | https://github.com/hugh514/barbearia-backoffice |
+| Porta local | `http://localhost:3001` |
+| API | `API_BASE_URL=http://localhost:3000` |
 
 ## Stack
-Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind 4 · TanStack Query/Table/Virtual ·
-Zod · react-hook-form · jose · Vitest + Testing Library · Playwright.
+
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind 4 · TanStack Query/Table/Virtual ·
+Zod · react-hook-form · jose · Vitest · Playwright
 
 ## Arquitetura
-- **Auth por cookie httpOnly + proxy** (Artigo II): o browser fala só com `/api/*`
-  (route handlers do Next), que anexam o token do cookie e encaminham à API. Token
-  nunca chega ao JS do cliente. Refresh atômico com retry único em 401.
-- **RBAC em duas camadas** (Artigo III): `src/proxy.ts` (middleware do Next 16) barra
-  rotas por papel no servidor; guards no cliente escondem ações. API é a barreira final.
-- **Validação Zod de toda resposta** (Artigo I): `src/lib/http/client.ts` (browser) e
-  `src/lib/http/server-api.ts` (server components) validam antes de usar.
-- **Idempotência** (Artigo VI): mutações enviam `Idempotency-Key`.
-- **Performance** (Artigo V): paginação/filtragem server-side, virtualização
-  (`@tanstack/react-virtual`) em listas grandes, cache com TanStack Query.
+
+- **Auth por cookie httpOnly + proxy**: o browser fala só com `/api/*`; tokens não vão para o JS do cliente.
+- **RBAC**: `src/proxy.ts` protege rotas; a API é a barreira final.
+- **Validação Zod** de respostas em `src/lib/http/`.
+- **Idempotência**: mutações enviam `Idempotency-Key`.
 
 ## Estrutura
-```
+
+```text
 src/
-  app/            # rotas (public: login/forgot/reset; app: dashboard/fila/clientes/...)
-    api/          # proxy + route handlers de auth
-  features/       # auth, dashboard, customers, queue, plans, users, finance
-  components/     # ui (primitivos) + layout (shell)
-  lib/            # zod base, auth (jwt/cookies/session/refresh), http, format
-  config/         # route-access (RBAC), navigation
-  proxy.ts        # middleware do Next 16 (proteção de rota)
+  app/            # rotas (public + app)
+    api/          # proxy e auth
+  features/       # auth, dashboard, customers, queue, plans, subscriptions, …
+  components/     # ui + layout
+  lib/            # http, auth, format
+  config/         # route-access, navigation
+  proxy.ts        # proteção de rota (Next 16)
+specs/            # SDD
 ```
 
 ## Rodar
+
 ```bash
-cp .env.example .env.local   # API_BASE_URL=http://localhost:3000
+cp .env.example .env.local
 npm install
-npm run dev                  # http://localhost:3001
+npm run dev
 ```
-A API precisa estar no ar (ver `../api-barbearia`). Credenciais de dev:
-`admin@barbearia.example` / `admin123`.
+
+A API precisa estar no ar (`api-barbearia`). Credenciais de seed: `admin@barbearia.example` / `admin123`.
 
 ## Testes
+
 ```bash
-npm test           # unit (Vitest) — 43 testes
-npm run test:e2e   # e2e (Playwright, contra build de produção) — 13 testes
-npm run typecheck  # tsc
-npm run build      # build de produção
+npm test
+npm run test:e2e
+npm run typecheck
+npm run build
 ```
 
-## Status dos módulos
-Ver `specs/README.md`. Implementados: auth, shell/RBAC, dashboard, fila, clientes,
-planos, financeiro, equipe. Pendentes (placeholders): inbox (Socket.IO), check-in QR, configurações.
+## Módulos
+
+Auth, shell/RBAC, dashboard, fila, clientes, planos, assinaturas, financeiro, equipe, inbox, check-in QR, configurações. Detalhes em `specs/README.md`.
+
+## Ecossistema
+
+| Repositório | Papel | Porta |
+|-------------|--------|-------|
+| [api-barbearia](https://github.com/hugh514/api-barbearia) | API | 3000 |
+| [barbearia-backoffice](https://github.com/hugh514/barbearia-backoffice) | Painel da equipe | 3001 |
+| [barbearia-cliente](https://github.com/hugh514/barbearia-cliente) | App do cliente | 3002 |
