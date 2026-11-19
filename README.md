@@ -1,3 +1,5 @@
+> Este repositório foi arquivado. O código continua em https://github.com/hugh514/barbearia, junto com os outros apps do sistema.
+
 # barbearia-backoffice
 
 Painel de gestão da plataforma de barbearia. Consome exclusivamente a API
